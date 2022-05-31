@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import './index.css';
+import React, { useState } from 'react';
+import LevelControl from './components/LevelControl';
+import Board from './components/Board';
+import { getSize } from './utils';
+import { fetchBoardGame } from './api/scrabble';
 
-function App() {
+export default function App () {
+  const [resp, setResp] = useState(null);
+
+  const fetchCrossWords = async (val) => {
+    const resp = await fetchBoardGame(val);
+    resp.size = getSize(resp.board, resp.candidate);
+    setResp(resp);
+  };
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <h3>Scrabble Cross Word Game - Current State</h3>
+      <LevelControl fetchCrossWords={fetchCrossWords} />
+      <Board resp={resp} />
     </div>
   );
 }
-
-export default App;
